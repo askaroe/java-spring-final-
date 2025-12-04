@@ -50,10 +50,15 @@ public class UserController {
             payload.put("email", p.getEmail());
             payload.put("fullName", p.getFullName());
             String envelope = objectMapper.writeValueAsString(Map.of("eventType", "USER_CREATED", "payload", payload));
-            kafkaTemplate.send(userEventsTopic, p.getId().toString(), envelope).addCallback(
-                    result -> log.info("Published USER_CREATED for user {}", p.getId()),
-                    ex -> log.error("Failed to publish USER_CREATED for user {}: {}", p.getId(), ex.getMessage())
-            );
+            kafkaTemplate.send(userEventsTopic, p.getId().toString(), envelope)
+                    .whenComplete((result, ex) -> {
+                        if (ex != null) {
+                            log.error("Failed to publish USER_CREATED for user {}: {}", p.getId(), ex.getMessage());
+                        } else {
+                            log.info("Published USER_CREATED for user {}", p.getId());
+                        }
+                    });
+
         } catch (Exception ex) {
             log.error("Failed to publish USER_CREATED event: {}", ex.getMessage());
         }

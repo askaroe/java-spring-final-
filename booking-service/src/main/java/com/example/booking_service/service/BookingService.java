@@ -51,10 +51,15 @@ public class BookingService {
         // Call event service to reserve tickets
         Map<String, Object> reserveReq = new HashMap<>();
         reserveReq.put("bookingId", bookingId.toString());
-        List<Map<String, Object>> itemsReq = req.getItems().stream().map(it -> Map.of(
-                "ticketTypeId", it.getTicketTypeId(),
-                "quantity", it.getQuantity()
-        )).collect(Collectors.toList());
+        List<Map<String, Object>> itemsReq = req.getItems().stream()
+                .map(it -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("ticketTypeId", it.getTicketTypeId());
+                    m.put("quantity", it.getQuantity());
+                    return m;
+                })
+                .collect(Collectors.toList());
+
         reserveReq.put("items", itemsReq);
 
         String url = eventServiceUrl + "/api/events/internal/" + req.getEventId() + "/reserve";
@@ -135,10 +140,15 @@ public class BookingService {
         // call event-service release
         Map<String, Object> releaseReq = new HashMap<>();
         releaseReq.put("bookingId", be.getId().toString());
-        List<Map<String, Object>> itemsReq = be.getItems().stream().map(i -> Map.of(
-                "ticketTypeId", i.getTicketTypeId(),
-                "quantity", i.getQuantity()
-        )).collect(Collectors.toList());
+        List<Map<String, Object>> itemsReq = be.getItems().stream()
+                .map(i -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("ticketTypeId", i.getTicketTypeId());
+                    m.put("quantity", i.getQuantity());
+                    return m;
+                })
+                .collect(Collectors.toList());
+
         releaseReq.put("items", itemsReq);
 
         String url = eventServiceUrl + "/api/events/internal/" + be.getEventId() + "/release";
@@ -185,15 +195,21 @@ public class BookingService {
         dto.setTotalAmount(be.getTotalAmount());
         dto.setCurrency(be.getCurrency());
         dto.setCreatedAt(be.getCreatedAt());
-        dto.setItems(be.getItems().stream().map(i -> {
-            BookingDto.Item it = new BookingDto.Item();
-            it.setId(i.getId());
-            it.setTicketTypeId(i.getTicketTypeId());
-            it.setQuantity(i.getQuantity());
-            it.setUnitPrice(i.getUnitPrice());
-            it.setTotalPrice(i.getTotalPrice());
-            return it;
-        }).collect(Collectors.toList()));
+
+        var items = be.getItems().stream()
+                .map(i -> {
+                    BookingDto.Item it = new BookingDto.Item();
+                    it.setId(i.getId());
+                    it.setTicketTypeId(i.getTicketTypeId());
+                    it.setQuantity(i.getQuantity());
+                    it.setUnitPrice(i.getUnitPrice());
+                    it.setTotalPrice(i.getTotalPrice());
+                    return it;
+                })
+                .collect(Collectors.toList());
+
+        dto.setItems(items);
         return dto;
     }
+
 }

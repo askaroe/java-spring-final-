@@ -1,20 +1,17 @@
 package com.example.booking_service.config;
 
-import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.OpenAPI;
-import org.springframework.context.annotation.Bean;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@OpenAPIDefinition(
+        info = @Info(
+                title = "Booking Service API",
+                version = "v1",
+                description = "API for managing bookings, booking items, and outbox events"
+        )
+)
 public class OpenApiConfig {
-
-    @Bean
-    public OpenAPI apiInfo() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Booking Service API")
-                        .version("v1")
-                        .description("Booking service endpoints"));
-    }
+    // no code needed, annotations do the work
 }
-

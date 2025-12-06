@@ -1,25 +1,57 @@
 package com.example.booking_service.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
 public class CreateBookingRequest {
+
+    @NotNull
+    private UUID userId;
+
+    @NotNull
     private UUID eventId;
-    private List<Item> items;
 
-    public static class Item {
-        private UUID ticketTypeId;
-        private int quantity;
+    @NotNull
+    private String currency;
 
-        public UUID getTicketTypeId() { return ticketTypeId; }
-        public void setTicketTypeId(UUID ticketTypeId) { this.ticketTypeId = ticketTypeId; }
-        public int getQuantity() { return quantity; }
-        public void setQuantity(int quantity) { this.quantity = quantity; }
+    @NotEmpty
+    private List<BookingItemDto> items;
+
+
+    // ---------- Getters & Setters ----------
+
+    public UUID getUserId() {
+        return userId;
     }
 
-    public UUID getEventId() { return eventId; }
-    public void setEventId(UUID eventId) { this.eventId = eventId; }
-    public List<Item> getItems() { return items; }
-    public void setItems(List<Item> items) { this.items = items; }
-}
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 
+    public UUID getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(UUID eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public List<BookingItemDto> getItems() {
+        return items;
+    }
+
+    public void setItems(List<BookingItemDto> items) {
+        this.items = items;
+    }
+}

@@ -66,4 +66,11 @@ public class ApiRouteService {
         dto.setRequiredRole(route.getRequiredRole());
         return dto;
     }
+
+    public List<ApiRouteDto> findAll() {
+        return routeRepository.findAll()
+                .stream()
+                .map(this::toDto)  // or whatever mapper you use
+                .toList();
+    }
 }

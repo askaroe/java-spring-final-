@@ -3,7 +3,6 @@ package com.example.api_gateway.controller;
 import com.example.api_gateway.dto.ApiRouteDto;
 import com.example.api_gateway.service.ApiRouteService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class ApiRouteController {
     // Only ADMIN can manage routes
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasRole('ADMIN')")
     public ApiRouteDto create(@RequestBody ApiRouteDto dto) {
         return routeService.create(dto);
     }
